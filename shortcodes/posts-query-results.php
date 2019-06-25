@@ -8,7 +8,7 @@ class ReactShortcodePosts
 {
     public static function react_shortcode_posts($atts, $content = '')
     {
-        $post_categories = get_terms('post-tag');
+        $post_categories = get_terms('category');
 
         $args = array(
             'post_type' => 'post',
@@ -35,7 +35,7 @@ class ReactShortcodePosts
         }
 
         foreach ($posts_query->posts as $post) {
-            $catagories_array = get_the_terms($post, 'post-tag');
+            $catagories_array = get_the_terms($post, 'category');
             $categories       = '';
             foreach ($catagories_array as $index => $cat) {
                 if ($index > 0) {
@@ -59,6 +59,7 @@ class ReactShortcodePosts
             postCategories: <?php echo wp_json_encode($react_post_categories) ?>,
             postQuery: <?php echo wp_json_encode($react_post_list) ?>,
         };
+        console.log(reactPosts);
     </script>
 
     <style>
@@ -68,51 +69,14 @@ class ReactShortcodePosts
         }
 
         .top-elements form {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             margin-bottom: 50px;
-        }
-
-        .top-elements form input::placeholder {
-            color: #777;
-        }
-
-        .top-elements form input[type="submit"],
-        .top-elements form a.location-direction.order-pickup.theme-button.large {
-            background-color: #ac121a;
-            border-radius: 0;
-            font-family: 'open sans';
-            font-weight: 700;
-            font-size: 20px;
-            margin-bottom: 0 !important;
-            padding: 11px 30px !important;
             text-align: center;
-            text-transform: uppercase;
         }
 
-        .top-elements form input[type="submit"]:hover,
-        .top-elements form a.location-direction.order-pickup.theme-button.large:hover {
-            background-color: #000;
-            border-radius: 0;
-            font-family: 'open sans';
-            font-weight: 700;
-            font-size: 20px !important;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .arichive-post-search .medium.gfield_select {
-            appearance: none;
-            -webkit-appearance: none;
-            background-repeat: no-repeat;
-            background-position-x: 95%;
-            background-position-y: center;
-            border-radius: 0;
-            height: 42px;
-            margin: 0 20px 0 0;
-            padding: 5px;
-            width: 200px;
+        .top-elements form input,
+        .top-elements form select {
+            max-width: 45%;
+            height: 50px;
         }
 
         .archive-post-items {
@@ -130,20 +94,26 @@ class ReactShortcodePosts
 
         .archive-post-items p {
             font-size: 16px;
-            font-family: "Open Sans", sans-serif;
             margin-bottom: 10px;
             padding-left: 0;
         }
 
-        .location-direction.order-pickup {
-            background-color: #ac121a
+        .archive-post-items a.post-button {
+            background-color: #333;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: white;
+            padding: 5px 15px;
+            text-decoration: none;
+            transition: 0.25s all ease;
         }
 
-        .location-direction.order-pickup:hover {
-            background-color: #000;
+        .archive-post-items a.post-button:hover {
+            background-color: #fff;
+            color: #333;
         }
 
-        @media(max-width: 1000px) {
+        @media (max-width: 1000px) {
             .archive-post-items {
                 display: grid;
                 grid-gap: 30px;
@@ -151,7 +121,7 @@ class ReactShortcodePosts
             }
         }
 
-        @media(max-width: 500px) {
+        @media (max-width: 500px) {
             .archive-post-items {
                 display: grid;
                 grid-gap: 30px;
@@ -159,8 +129,6 @@ class ReactShortcodePosts
             }
         }
     </style>
-
-    <h2 style="text-align: center">Our posts</h2>
     <div class="top-elements">
         <div id="react-posts-element" class="react-post-search"></div>
     </div>

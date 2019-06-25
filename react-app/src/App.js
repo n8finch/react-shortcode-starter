@@ -1,5 +1,6 @@
 import React from "react";
-import "./App.css";
+// TODO: Get a webpack loader, see errors
+// import "./App.css";
 import PostItem from "./components/PostItem";
 
 class App extends React.Component {
@@ -24,7 +25,6 @@ class App extends React.Component {
       posts: this.props.posts.postQuery,
       categories: this.props.posts.postCategories
     });
-    console.log(this.props);
   }
 
   handleInputChange(e) {
@@ -80,39 +80,19 @@ class App extends React.Component {
             onChange={e => this.handleInputChange(e)}
             value={this.state.search}
             placeholder="Search Posts"
-            style={{
-              backgroundColor: "#f7f7f7",
-              border: "1px solid #eee",
-              color: "#777",
-              marginRight: "20px",
-              paddingLeft: "5px"
-            }}
           />
           <label>
             <select
               className="medium gfield_select"
               value={this.state.select}
               onChange={e => this.handleSelectChange(e)}
-              style={{
-                backgroundImage:
-                  'url("/wp-content/plugins/milios-recipes-plugin/images/arrow-down.png")'
-              }}
             >
-              <option value="">Select Location</option>
+              <option value="">Select Cetegory</option>
               {this.state.categories.map(cat => {
                 return <option value={cat}>{cat}</option>;
               })}
             </select>
           </label>
-          {/* <input type="submit" value="Search" /> */}
-          <div>
-            <a
-              class="location-direction order-pickup theme-button large"
-              href="/locations"
-            >
-              <i class="ticon ticon-location-arrow" /> Find Your Post
-            </a>
-          </div>
         </form>
 
         <div className="archive-post-items post-results">
