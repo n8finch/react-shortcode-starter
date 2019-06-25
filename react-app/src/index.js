@@ -5,8 +5,8 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <App stores={milios} />,
-  document.getElementById("milios-react-element")
+  <App posts={reactPosts} />,
+  document.getElementById("react-posts-element")
 );
 
 // If you want your app to work offline and load faster, you can change

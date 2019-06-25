@@ -1,60 +1,41 @@
 <?php
 
-add_shortcode('store_archive_grid', array('StoreArchiveGrid', 'store_archive_grid'));
+// Add the link to the WP Docs here
 
-class StoreArchiveGrid
+add_shortcode('react_shortcode_posts', array('ReactShortcodePosts', 'react_shortcode_posts'));
+
+class ReactShortcodePosts
 {
-    public static function store_archive_grid($atts, $content = '')
+    public static function post_archive_grid($atts, $content = '')
     {
-        $req_cat = (array_key_exists('store-cat', $_REQUEST)) ? $_REQUEST['store-cat'] : false;
-        $req_string = (array_key_exists('store-string', $_REQUEST)) ? $_REQUEST['store-string'] : false;
-
-        $store_categories = get_terms('store-tag');
+        $post_categories = get_terms('post-tag');
 
         $args = array(
-            'post_type' => 'stores',
-            'posts_per_page' => -1,
-            'order' => 'ASC',
+            'post_type' => 'post',
+            'posts_per_page' => 100,
+            'order' => 'DESC',
             'orderby' => 'title',
             'tax_query' => array(
                 'relation' => 'OR',
             ),
         );
 
-        // Meal is specified.
-        if ($req_cat) {
-            $store_cats = array(
-                'taxonomy' => 'store-tag',
-                'field' => 'slug',
-                'terms' => array($req_cat),
-            );
-
-            array_push($args['tax_query'], $store_cats);
-        }
-
-        if ($req_string) {
-            $args['s'] = $req_string;
-        }
-
         // The Query
-        $store_query = new WP_Query($args);
+        $posts_query = new WP_Query($args);
 
-
-        /**
-         * DO THE STUFF FOR REACT
-         */
-        $react_store_categories = [];
-        $react_store_list = [];
+        // Prep the data for the React app.
+        $react_post_categories = [];
+        $react_post_list = [];
         $count = 0;
         $counter = 0;
 
-        foreach ($store_categories as $cat) {
-            $react_store_categories[$count] = $cat->name;
+        foreach ($post_categories as $cat) {
+            $react_post_categories[$count] = $cat->name;
             $count++;
         }
 
-        foreach ($store_query->posts as $post) {
-            $catagories_array = get_the_terms($post, 'store-tag');
+        foreach ($posts_query->posts as $post) {
+            $catagories_array = get_the_terms($post, 'post-tag');
             $categories       = '';
             foreach ($catagories_array as $index => $cat) {
                 if ($index > 0) {
@@ -62,19 +43,21 @@ class StoreArchiveGrid
                 }
                 $categories .= $cat->name;
             }
-            $react_store_list[$counter]['link'] =  esc_url(get_permalink($post));
-            $react_store_list[$counter]['thumb'] = esc_url(get_the_post_thumbnail_url($post->ID, 'blog_entry'));
-            $react_store_list[$counter]['title'] = esc_html($post->post_title);
-            $react_store_list[$counter]['alt'] = esc_html($post->post_title);
-            $react_store_list[$counter]['cat'] = $categories;
+            $react_post_list[$counter]['link'] =  esc_url(get_permalink($post));
+            $react_post_list[$counter]['thumb'] = esc_url(get_the_post_thumbnail_url($post->ID, 'blog_entry'));
+            $react_post_list[$counter]['title'] = esc_html($post->post_title);
+            $react_post_list[$counter]['alt'] = esc_html($post->post_title);
+            $react_post_list[$counter]['cat'] = $categories;
             $counter++;
         }
         ?>
+
     <script>
-        // SEND REACT STUFF TO BROWSER
-        var milios = {
-            storeCategories: <?php echo wp_json_encode($react_store_categories) ?>,
-            storeQuery: <?php echo wp_json_encode($react_store_list) ?>,
+        // TODO: Probably a better way to do this.
+        // Send React data to the browser
+        var reactPosts = {
+            postCategories: <?php echo wp_json_encode($react_post_categories) ?>,
+            postQuery: <?php echo wp_json_encode($react_post_list) ?>,
         };
     </script>
 
@@ -119,7 +102,7 @@ class StoreArchiveGrid
             text-transform: uppercase;
         }
 
-        .arichive-store-search .medium.gfield_select {
+        .arichive-post-search .medium.gfield_select {
             appearance: none;
             -webkit-appearance: none;
             background-repeat: no-repeat;
@@ -132,20 +115,20 @@ class StoreArchiveGrid
             width: 200px;
         }
 
-        .archive-store-items {
+        .archive-post-items {
             display: grid;
             grid-gap: 30px;
             grid-template-columns: 1fr 1fr 1fr 1fr;
         }
 
-        .archive-store-items h3 {
+        .archive-post-items h3 {
             font-size: 18px;
             margin-bottom: 0;
             margin-top: 0;
             padding-left: 0;
         }
 
-        .archive-store-items p {
+        .archive-post-items p {
             font-size: 16px;
             font-family: "Open Sans", sans-serif;
             margin-bottom: 10px;
@@ -161,7 +144,7 @@ class StoreArchiveGrid
         }
 
         @media(max-width: 1000px) {
-            .archive-store-items {
+            .archive-post-items {
                 display: grid;
                 grid-gap: 30px;
                 grid-template-columns: 1fr 1fr 1fr;
@@ -169,7 +152,7 @@ class StoreArchiveGrid
         }
 
         @media(max-width: 500px) {
-            .archive-store-items {
+            .archive-post-items {
                 display: grid;
                 grid-gap: 30px;
                 grid-template-columns: 1fr;
@@ -177,11 +160,9 @@ class StoreArchiveGrid
         }
     </style>
 
-    <h1 style="text-align: center">Our Stores</h1>
-    <h2 style="color: #ac121a; font-family:'Rock Salt'; text-align: center">Come and Get It!</h2>
-
+    <h2 style="text-align: center">Our posts</h2>
     <div class="top-elements">
-        <div id="milios-react-element" class="arichive-store-search"></div>
+        <div id="react-posts-element" class="react-post-search"></div>
     </div>
     <?php
     wp_reset_postdata();
