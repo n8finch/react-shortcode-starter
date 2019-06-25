@@ -1,28 +1,28 @@
 import React from "react";
 import "./App.css";
-import StoreItem from "./components/StoreItem";
+import PostItem from "./components/PostItem";
 
 class App extends React.Component {
   constructor(props) {
     super();
 
-    const externalStores = props;
+    const externalPosts = props;
 
     this.state = {
       categories: [],
       search: "",
       select: "",
-      stores: []
+      posts: []
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-    this.sortStore = this.sortStore.bind(this);
+    this.sortPost = this.sortPost.bind(this);
   }
 
   componentWillMount() {
     this.setState({
-      stores: this.props.stores.storeQuery,
-      categories: this.props.stores.storeCategories
+      posts: this.props.posts.postQuery,
+      categories: this.props.posts.postCategories
     });
     console.log(this.props);
   }
@@ -39,34 +39,34 @@ class App extends React.Component {
     });
   }
 
-  soreStoreSearch(store) {}
+  sorePostSearch(post) {}
 
-  sortStore(store) {
+  sortPost(post) {
     if ("" === this.state.search && "" === this.state.select) {
-      return <StoreItem key={store.title} store={store} />;
+      return <PostItem key={post.title} post={post} />;
     }
 
     if (
       "" !== this.state.select &&
-      -1 < store.cat.indexOf(this.state.select) &&
+      -1 < post.cat.indexOf(this.state.select) &&
       "" === this.state.search
     ) {
-      return <StoreItem key={store.title} store={store} />;
+      return <PostItem key={post.title} post={post} />;
     }
 
     if (
       "" !== this.state.search &&
-      -1 < store.title.toLowerCase().indexOf(this.state.search.toLowerCase()) &&
+      -1 < post.title.toLowerCase().indexOf(this.state.search.toLowerCase()) &&
       "" === this.state.select
     ) {
-      return <StoreItem key={store.title} store={store} />;
+      return <PostItem key={post.title} post={post} />;
     }
 
     if (
-      -1 < store.title.toLowerCase().indexOf(this.state.search.toLowerCase()) &&
-      -1 < store.cat.indexOf(this.state.select)
+      -1 < post.title.toLowerCase().indexOf(this.state.search.toLowerCase()) &&
+      -1 < post.cat.indexOf(this.state.select)
     ) {
-      return <StoreItem key={store.title} store={store} />;
+      return <PostItem key={post.title} post={post} />;
     }
 
     return;
@@ -75,11 +75,11 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <form className="arichive-store-search" action="/stores/" method="get">
+        <form className="arichive-post-search" action="/posts/" method="get">
           <input
             onChange={e => this.handleInputChange(e)}
             value={this.state.search}
-            placeholder="Search Stores"
+            placeholder="Search Posts"
             style={{
               backgroundColor: "#f7f7f7",
               border: "1px solid #eee",
@@ -110,15 +110,15 @@ class App extends React.Component {
               class="location-direction order-pickup theme-button large"
               href="/locations"
             >
-              <i class="ticon ticon-location-arrow" /> Find Your Store
+              <i class="ticon ticon-location-arrow" /> Find Your Post
             </a>
           </div>
         </form>
 
-        <div className="archive-store-items store-results">
-          {this.state.stores.map(store => {
-            const sortedStores = this.sortStore(store);
-            return sortedStores;
+        <div className="archive-post-items post-results">
+          {this.state.posts.map(post => {
+            const sortedPosts = this.sortPost(post);
+            return sortedPosts;
           })}
         </div>
       </div>

@@ -6,7 +6,7 @@ add_shortcode('react_shortcode_posts', array('ReactShortcodePosts', 'react_short
 
 class ReactShortcodePosts
 {
-    public static function post_archive_grid($atts, $content = '')
+    public static function react_shortcode_posts($atts, $content = '')
     {
         $post_categories = get_terms('post-tag');
 
