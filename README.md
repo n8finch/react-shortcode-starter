@@ -15,5 +15,11 @@ This is a very basic webpack config, just to compile JSX and runs babel for tran
 
 ## Things to improve
 
-- Watch and compile to the `dist` folder on save
 - Add in CSS bundling so styles can be added to `App.css`
+- Watch and compile to the `dist` folder on save
+- maybe create an `npx create-react-shortcode` boilerplate... Although just found this: https://github.com/gopangolin/wp-reactivate so maybe I can use that going forward... `¯\_(ツ)\*/¯`
+
+### Resources Used:
+
+- https://www.valentinog.com/blog/babel/ (follow this pretty closely).
+- https://javascriptforwp.com/enqueue-react-in-wordpress/
