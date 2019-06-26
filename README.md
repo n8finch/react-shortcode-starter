@@ -1,5 +1,7 @@
 # React App Shortcode Starter
 
+![React post sorting](./screenshot.gif)
+
 Description: This is a simple React app that queries posts, and is meant as a starter for interactivity.
 The app itself comes with text and category real time sorting.
 
